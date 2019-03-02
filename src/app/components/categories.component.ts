@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import { ApiBaseCallComponent } from './apibasecall.component';
+
 import { Category } from '../model/category';
 
 @Component({
@@ -21,8 +22,8 @@ export class CategoriesComponent extends ApiBaseCallComponent {
 
   public categories: Category[];
 
-    constructor(public http: Http) {
-      super(http);
+    constructor(public httpClient: HttpClient) {
+      super(httpClient);
      }
 
     ngOnInit(): void {
@@ -31,6 +32,6 @@ export class CategoriesComponent extends ApiBaseCallComponent {
 
     getCategoriesData(): Promise<Category[]> {
         return super.apiGetRequest(this.getApi)
-        .then(response => response.json().categories as Category[]);
+        .then(response => response.categories as Category[]);
     }
 }

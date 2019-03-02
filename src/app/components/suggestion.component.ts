@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 
 import { ApiBaseCallComponent } from '../components/apibasecall.component';
 
@@ -10,7 +11,7 @@ import { Restaurant } from '../model/restaurant';
   `<div class="row">
     <div class="col-xs-9">
         <label>Location: </label>
-        <input class="form-control" [(ngModel)]="location" />
+        <input class="form-control" [(ngModel)]="location" (keydown.enter)="suggest(counter)" />
     </div>
     <div class="col-xs-3">
         <button type="button" class="btn btn-default" style="margin-top: 25px;" (click)="suggest(counter)">Suggest</button>
@@ -26,20 +27,22 @@ import { Restaurant } from '../model/restaurant';
 })
 
 export class SuggestionComponent extends ApiBaseCallComponent {
-    public location: string = "Nashville";
+    public location: string;
     public counter: number = 0;
     public restaurants: Restaurant[];
 
-    public searchByLocationOnlyUrl: string = "https://api.yelp.com/v3/businesses/search?location=Nashville";
+    public searchByLocationOnlyUrl: string = "https://api.yelp.com/v3/businesses/search";
 
     suggest(){
         console.log(this.location + " " + this.counter);
         this.counter += 1;
-        this.getRestaurantsData().then(restaurants => this.restaurants = restaurants);
+        let params = new HttpParams();
+        params = params.append('location', this.location);
+        this.getRestaurantsData(params).then(restaurants => this.restaurants = restaurants);
     }
 
-    getRestaurantsData(): Promise<Restaurant[]> {
-        return super.apiGetRequest(this.searchByLocationOnlyUrl)
-        .then(response => response.json().businesses as Restaurant[]);
+    getRestaurantsData(params: HttpParams): Promise<Restaurant[]> {
+        return super.apiGetRequestWithParams(this.searchByLocationOnlyUrl, params)
+        .then(response => response.businesses as Restaurant[]);
     }
 }

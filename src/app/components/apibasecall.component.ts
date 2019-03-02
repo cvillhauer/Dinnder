@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'apibasecall',
@@ -10,24 +10,32 @@ import { Headers, Http } from '@angular/http';
 })
 
 export class ApiBaseCallComponent {
-  private headers: Headers = new Headers();
+  private headers: HttpHeaders = new HttpHeaders();
   private apiKey: string = "iQs04ljFIuuD88ShazdNj_TP0VlrQuN2lm5iIu4hd4jjCwReExISjHVYJxv0ZmoB1-6cIUvwL25azbr9lXUD3fgzyavRzQjJ0Ai0s6Glq0b9-321-bjhhfA7acN6XHYx";
   private proxyUrl: string = "https://cors-anywhere.herokuapp.com/";
 
-    constructor(public http: Http) {
+    constructor(public httpClient: HttpClient) {
     
      }
 
     apiGetRequest(getUrl: string): Promise<any> {
-        this.headers.append('Content-Type', 'application/json');
-        this.headers.append('Authorization', ('Bearer ' + this.apiKey));
-        let params = new URLSearchParams();
-        params.append("location", "Nashville");
-        //return this.http.get(this.proxyUrl + getUrl, { headers: this.headers, search: params })
-        return this.http.get(this.proxyUrl + getUrl, { headers: this.headers })
+        let fullUrl: string = this.proxyUrl + getUrl;
+        return this.httpClient.get(fullUrl, {
+          headers: {'Content-Type':'application/json','Authorization':('Bearer ' + this.apiKey)}
+        })
             .toPromise()
             .catch(this.handleError);
     }
+
+    apiGetRequestWithParams(getUrl: string, getParams: HttpParams): Promise<any> {
+      let fullUrl: string = this.proxyUrl + getUrl;
+      return this.httpClient.get(fullUrl, {
+        headers: {'Content-Type':'application/json','Authorization':('Bearer ' + this.apiKey)},
+        params: getParams
+      })
+          .toPromise()
+          .catch(this.handleError);
+  }
 
     public handleError(error: any): Promise<any> {
         console.error('An error occurred', error);
