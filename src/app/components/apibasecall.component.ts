@@ -21,6 +21,9 @@ export class ApiBaseCallComponent {
     apiGetRequest(getUrl: string): Promise<any> {
         this.headers.append('Content-Type', 'application/json');
         this.headers.append('Authorization', ('Bearer ' + this.apiKey));
+        let params = new URLSearchParams();
+        params.append("location", "Nashville");
+        //return this.http.get(this.proxyUrl + getUrl, { headers: this.headers, search: params })
         return this.http.get(this.proxyUrl + getUrl, { headers: this.headers })
             .toPromise()
             .catch(this.handleError);
