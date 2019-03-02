@@ -9,7 +9,8 @@ import { Component } from '@angular/core';
   <br/><br/>
   <div class="container">
     <suggestion></suggestion>
-    <!-- <categories></categories> -->
+    <br/><br/>
+    <categories></categories>
   </div>
   `
 })

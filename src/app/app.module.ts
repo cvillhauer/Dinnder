@@ -4,11 +4,12 @@ import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
+import { ApiBaseCallComponent } from './components/apibasecall.component';
 import { CategoriesComponent } from './components/categories.component';
 import { SuggestionComponent } from './components/suggestion.component';
 
 @NgModule({
-  declarations: [ AppComponent, CategoriesComponent, SuggestionComponent ],
+  declarations: [ AppComponent, ApiBaseCallComponent, CategoriesComponent, SuggestionComponent ],
   imports: [ BrowserModule, FormsModule, HttpModule ],
   providers: [],
   bootstrap: [AppComponent]

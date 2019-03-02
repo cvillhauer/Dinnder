@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ApiBaseCallComponent } from '../components/apibasecall.component';
 
 @Component({
   selector: 'suggestion',
@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
   `
 })
 
-export class SuggestionComponent {
+export class SuggestionComponent extends ApiBaseCallComponent {
     public location: string = "Nashville";
     public counter: number = 0;
 
