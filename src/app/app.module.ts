@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { CategoriesComponent } from './components/categories';
+import { CategoriesComponent } from './components/categories.component';
 
 @NgModule({
   declarations: [ AppComponent, CategoriesComponent ],
