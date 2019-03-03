@@ -72,7 +72,7 @@ export class SuggestionComponent extends ApiBaseCallComponent {
     }
 
     buildYelpStarImage(rating: number){
-        let yelpStarImageUrl = "../assets/yelp/large/large_";
+        let yelpStarImageUrl = "./assets/yelp/large/large_";
         if(Math.floor(rating) === rating){
             yelpStarImageUrl += rating;
         }
