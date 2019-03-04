@@ -29,11 +29,12 @@ import { Category } from '../model/category';
   </div>
   <div class="row">
     <br/><br/>
-    <div *ngIf="restaurants && restaurants[counter]">
+    <div class="col-xs-12" *ngIf="restaurants && restaurants[counter]">
         <h4>{{restaurants[counter].name}} &nbsp; {{restaurants[counter].price}} &nbsp; <img src="{{buildYelpStarImage(restaurants[counter].rating)}}"/></h4>
         <a href="{{restaurants[counter].url}}"><img width="500" src="{{restaurants[counter].image_url}}" title="{{restaurants[counter].name}}"/></a>
     </div>
-    <div *ngIf="(!restaurants || !restaurants[counter]) && !firstSuggestion"><p>Loading...</p></div>
+    <div class="col-xs-12" *ngIf="resultsExhausted"><p>No more restaurants available. Please alter your search terms.</p></div>
+    <div class="col-xs-12" *ngIf="!firstSuggestion && !resultsExhausted && (!restaurants || !restaurants[counter])"><p>Loading...</p></div>
   </div>
   `
 })
@@ -42,6 +43,7 @@ export class SuggestionComponent extends ApiBaseCallComponent {
     public counter: number = 0;
     public offset: number = 0;
     public restaurantLimit: number = 20;
+    public resultsExhausted: boolean = false;
     public firstSuggestion: boolean = true;
     public restaurants: Restaurant[];
 
@@ -88,27 +90,20 @@ export class SuggestionComponent extends ApiBaseCallComponent {
     public searchByLocationUrl: string = "https://api.yelp.com/v3/businesses/search";
 
     suggest(){
-        if(!this.restaurants || this.counter + 1 >= this.restaurants.length){
+        if(this.resultsExhausted){
+            return;
+        }
+        else if(!this.restaurants || this.counter + 1 >= this.restaurants.length){
             if(!this.firstSuggestion){
+                if(this.restaurants.length < this.restaurantLimit){
+                    this.resultsExhausted = true;
+                }
                 this.offset += this.restaurantLimit;
             }
             this.counter = 0;
             this.restaurants = [];
             this.firstSuggestion = false;
-            let params = new HttpParams();
-            params = params.append("term", "restaurant");
-            params = params.append("open_now", "true");
-            params = params.append("location", this.location);
-            if(this.selectedCategory && this.selectedCategory.alias){
-                params = params.append("categories", this.selectedCategory.alias);
-            }
-            if(this.distance){
-                let distanceInMeters = this.distance * 1609; //1609 meters to a mile
-                console.log(distanceInMeters);
-                params = params.append("radius", distanceInMeters.toString());
-            }
-            params = params.append("limit", this.restaurantLimit.toString());
-            params = params.append("offset", this.offset.toString());
+            let params = this.buildParams();
             this.getRestaurantsData(params).then(restaurants => this.restaurants = restaurants);
         }
         else {
@@ -117,11 +112,32 @@ export class SuggestionComponent extends ApiBaseCallComponent {
     }
 
     searchChange(){
+        this.resultsExhausted = false;
         this.firstSuggestion = true;
         this.counter = 0;
         this.offset = 0;
         this.restaurants = [];
         this.suggest();
+    }
+
+    buildParams(): HttpParams{
+        let params = new HttpParams();
+        params = params.append("term", "restaurant");
+        params = params.append("open_now", "true");
+        params = params.append("location", this.location);
+        if(this.selectedCategory && this.selectedCategory.alias){
+            params = params.append("categories", this.selectedCategory.alias);
+        }
+        if(this.distance){
+            let distanceInMeters = this.distance * 1609; //1609 meters to a mile
+            if(distanceInMeters > 40000){
+                distanceInMeters = 40000; //Maximum searchable distance is 40000 meters, almost 25 miles
+            }
+            params = params.append("radius", distanceInMeters.toString());
+        }
+        params = params.append("limit", this.restaurantLimit.toString());
+        params = params.append("offset", this.offset.toString());
+        return params;
     }
 
     getRestaurantsData(params: HttpParams): Promise<Restaurant[]> {
