@@ -4,13 +4,11 @@ import { Component } from '@angular/core';
   selector: 'app-root',
   template: 
   `
-  <h1>Dinnder <a target="_blank" href="https://www.yelp.com/"><img width="85px" src="./assets/yelp/logo/Yelp_trademark_RGB.png"/></a></h1>
-  <h3>What should I eat for dinner?</h3>
-  <br/><br/>
   <div class="container">
-    <suggestion></suggestion>
+    <h1>Dinnder <a target="_blank" href="https://www.yelp.com/"><img width="85px" src="./assets/yelp/logo/Yelp_trademark_RGB.png"/></a></h1>
+    <h3>What should I eat for dinner?</h3>
     <br/><br/>
-    <!-- <categories></categories> -->
+    <suggestion></suggestion>
   </div>
   `
 })
