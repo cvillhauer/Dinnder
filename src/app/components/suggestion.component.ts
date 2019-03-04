@@ -21,12 +21,15 @@ import { Category } from '../model/category';
         </select>
     </div>
     <div class="col-xs-3">
-        <button type="button" class="btn btn-default" style="margin-top: 25px;" (click)="suggest()">Suggest</button>
+        <label>Distance:</label>
+        <input class="form-control" [(ngModel)]="distance" (change)="searchChange()" />
+        <br/>
+        <button type="button" class="form-control btn btn-default" style="margin-top: 25px;" (click)="suggest()">Suggest</button>
     </div>
   </div>
   <div class="row">
     <br/><br/>
-    <div *ngIf="restaurants && restaurants[counter]" style="text-align: center;">
+    <div *ngIf="restaurants && restaurants[counter]">
         <h4>{{restaurants[counter].name}} &nbsp; {{restaurants[counter].price}} &nbsp; <img src="{{buildYelpStarImage(restaurants[counter].rating)}}"/></h4>
         <a href="{{restaurants[counter].url}}"><img width="500" src="{{restaurants[counter].image_url}}" title="{{restaurants[counter].name}}"/></a>
     </div>
@@ -44,6 +47,7 @@ export class SuggestionComponent extends ApiBaseCallComponent {
 
     public location: string;
     public selectedCategory: Category;
+    public distance: number = 5;
 
     public categories: Category[] = [
         { alias: "tradamerican", title: "American (Traditional)"},
@@ -97,6 +101,11 @@ export class SuggestionComponent extends ApiBaseCallComponent {
             params = params.append("location", this.location);
             if(this.selectedCategory && this.selectedCategory.alias){
                 params = params.append("categories", this.selectedCategory.alias);
+            }
+            if(this.distance){
+                let distanceInMeters = this.distance * 1609; //1609 meters to a mile
+                console.log(distanceInMeters);
+                params = params.append("radius", distanceInMeters.toString());
             }
             params = params.append("limit", this.restaurantLimit.toString());
             params = params.append("offset", this.offset.toString());
