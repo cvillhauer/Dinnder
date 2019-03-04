@@ -92,12 +92,14 @@ export class SuggestionComponent extends ApiBaseCallComponent {
             this.restaurants = [];
             this.firstSuggestion = false;
             let params = new HttpParams();
-            params = params.append('location', this.location);
+            params = params.append("term", "restaurant");
+            params = params.append("open_now", "true");
+            params = params.append("location", this.location);
             if(this.selectedCategory && this.selectedCategory.alias){
-                params = params.append('categories', this.selectedCategory.alias);
+                params = params.append("categories", this.selectedCategory.alias);
             }
-            params = params.append('limit', this.restaurantLimit.toString());
-            params = params.append('offset', this.offset.toString());
+            params = params.append("limit", this.restaurantLimit.toString());
+            params = params.append("offset", this.offset.toString());
             this.getRestaurantsData(params).then(restaurants => this.restaurants = restaurants);
         }
         else {
