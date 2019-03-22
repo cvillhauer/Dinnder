@@ -35,7 +35,7 @@ import { CategoryService } from '../services/category.service';
         src="{{restaurants[counter].image_url}}" title="{{restaurants[counter].name}}"/></a>
     </div>
     <div class="col-xs-12" *ngIf="resultsExhausted"><p>No more restaurants available. Please alter your search terms.</p></div>
-    <div class="col-xs-12" *ngIf="!firstSuggestion && !resultsExhausted && (!restaurants || !restaurants[counter])"><p>Loading...</p></div>
+    <div class="col-xs-12" *ngIf="loading"><p>Loading...</p></div>
   </div>
   `
 })
@@ -52,6 +52,9 @@ export class SuggestionComponent implements OnInit {
   categories: Category[] = [];
   distance = 5;
   constructor(private busService: BusinessService, private catService: CategoryService) {}
+  get loading() {
+    return !this.firstSuggestion && !this.resultsExhausted && (!this.restaurants || !this.restaurants[this.counter]);
+  }
   ngOnInit() {
     this.catService.getCategories().subscribe(cats => {
       // console.log('cats', cats);
