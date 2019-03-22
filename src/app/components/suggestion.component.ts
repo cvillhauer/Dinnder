@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
-
-import { ApiBaseCallComponent } from '../components/apibasecall.component';
-
 import { Restaurant } from '../model/restaurant';
 import { Category } from '../model/category';
+import { BusinessService } from '../services/business.service';
+import { CategoryService } from '../services/category.service';
 
 @Component({
   selector: 'suggestion',
@@ -30,8 +29,10 @@ import { Category } from '../model/category';
   <div class="row">
     <br/><br/>
     <div class="col-xs-12" *ngIf="restaurants && restaurants[counter]">
-        <h4>{{restaurants[counter].name}} &nbsp; {{restaurants[counter].price}} &nbsp; <img src="{{buildYelpStarImage(restaurants[counter].rating)}}"/></h4>
-        <a href="{{restaurants[counter].url}}"><img width="500" src="{{restaurants[counter].image_url}}" title="{{restaurants[counter].name}}"/></a>
+        <h4>{{restaurants[counter].name}} &nbsp; {{restaurants[counter].price}} &nbsp;
+        <img src="{{buildYelpStarImage(restaurants[counter].rating)}}"/></h4>
+        <a href="{{restaurants[counter].url}}"><img width="500"
+        src="{{restaurants[counter].image_url}}" title="{{restaurants[counter].name}}"/></a>
     </div>
     <div class="col-xs-12" *ngIf="resultsExhausted"><p>No more restaurants available. Please alter your search terms.</p></div>
     <div class="col-xs-12" *ngIf="!firstSuggestion && !resultsExhausted && (!restaurants || !restaurants[counter])"><p>Loading...</p></div>
@@ -39,121 +40,78 @@ import { Category } from '../model/category';
   `
 })
 
-export class SuggestionComponent extends ApiBaseCallComponent {
-    public counter: number = 0;
-    public offset: number = 0;
-    public restaurantLimit: number = 20;
-    public resultsExhausted: boolean = false;
-    public firstSuggestion: boolean = true;
-    public restaurants: Restaurant[];
-
-    public location: string;
-    public selectedCategory: Category;
-    public distance: number = 5;
-
-    public categories: Category[] = [
-        { alias: "tradamerican", title: "American (Traditional)"},
-        { alias: "bbq", title: "Barbeque"},
-        { alias: "breakfast_brunch", title: "Breakfast & Brunch"},
-        { alias: "buffets", title: "Buffets"},
-        { alias: "burgers", title: "Burgers"},
-        { alias: "chicken_wings", title: "Chicken Wings"},
-        { alias: "chinese", title: "Chinese"},
-        { alias: "delis", title: "Delis"},
-        { alias: "diners", title: "Diners"},
-        { alias: "hotdogs", title: "Fast Food"},
-        { alias: "greek", title: "Greek"},
-        { alias: "indian", title: "Indian"},
-        { alias: "irish", title: "Irish"},
-        { alias: "italian", title: "Italian"},
-        { alias: "japanese", title: "Japanese"},
-        { alias: "korean", title: "Korean"},
-        { alias: "mexican", title: "Mexican"},
-        { alias: "noodles", title: "Noodles"},
-        { alias: "pizza", title: "Pizza"},
-        { alias: "salad", title: "Salad"},
-        { alias: "sandwiches", title: "Sandwiches"},
-        { alias: "seafood", title: "Seafood"},
-        { alias: "soulfood", title: "Soul Food"},
-        { alias: "soup", title: "Soup"},
-        { alias: "southern", title: "Southern"},
-        { alias: "steak", title: "Steakhouses"},
-        { alias: "sushi", title: "Sushi Bars"},
-        { alias: "tex-mex", title: "Tex-Mex"},
-        { alias: "thai", title: "Thai"},
-        { alias: "vegan", title: "Vegan"},
-        { alias: "vegetarian", title: "Vegetarian"},
-        { alias: "vietnamese", title: "Vietnamese"},
-        { alias: "wraps", title: "Wraps"}
-    ];
-
-    public searchByLocationUrl: string = "https://api.yelp.com/v3/businesses/search";
-
-    suggest(){
-        if(this.resultsExhausted){
-            return;
-        }
-        else if(!this.restaurants || this.counter + 1 >= this.restaurants.length){
-            if(!this.firstSuggestion){
-                if(this.restaurants.length < this.restaurantLimit){
-                    this.resultsExhausted = true;
-                }
-                this.offset += this.restaurantLimit;
+export class SuggestionComponent implements OnInit {
+  counter = 0;
+  offset = 0;
+  restaurantLimit = 20;
+  resultsExhausted = false;
+  firstSuggestion = true;
+  restaurants: Restaurant[] = [];
+  location: string;
+  selectedCategory: Category;
+  categories: Category[] = [];
+  distance = 5;
+  constructor(private busService: BusinessService, private catService: CategoryService) {}
+  ngOnInit() {
+    this.catService.getCategories().subscribe(cats => {
+      // console.log('cats', cats);
+      this.categories = cats;
+    });
+  }
+  suggest() {
+    if (this.resultsExhausted) {
+        return;
+    } else if (!this.restaurants || this.counter + 1 >= this.restaurants.length) {
+        if (!this.firstSuggestion) {
+            if (this.restaurants.length < this.restaurantLimit) {
+                this.resultsExhausted = true;
             }
-            this.counter = 0;
-            this.restaurants = [];
-            this.firstSuggestion = false;
-            let params = this.buildParams();
-            this.getRestaurantsData(params).then(restaurants => this.restaurants = restaurants);
+            this.offset += this.restaurantLimit;
         }
-        else {
-            this.counter += 1;
-        }
-    }
-
-    searchChange(){
-        this.resultsExhausted = false;
-        this.firstSuggestion = true;
         this.counter = 0;
-        this.offset = 0;
         this.restaurants = [];
-        this.suggest();
+        this.firstSuggestion = false;
+        const params = this.buildParams();
+        this.busService.getBusinesses(params).subscribe(restaurants => this.restaurants = restaurants);
+    } else {
+        this.counter += 1;
     }
-
-    buildParams(): HttpParams{
-        let params = new HttpParams();
-        params = params.append("term", "restaurant");
-        params = params.append("open_now", "true");
-        params = params.append("location", this.location);
-        if(this.selectedCategory && this.selectedCategory.alias){
-            params = params.append("categories", this.selectedCategory.alias);
-        }
-        if(this.distance){
-            let distanceInMeters = this.distance * 1609; //1609 meters to a mile
-            if(distanceInMeters > 40000){
-                distanceInMeters = 40000; //Maximum searchable distance is 40000 meters, almost 25 miles
-            }
-            params = params.append("radius", distanceInMeters.toString());
-        }
-        params = params.append("limit", this.restaurantLimit.toString());
-        params = params.append("offset", this.offset.toString());
-        return params;
-    }
-
-    getRestaurantsData(params: HttpParams): Promise<Restaurant[]> {
-        return super.apiGetRequestWithParams(this.searchByLocationUrl, params)
-        .then(response => response.businesses as Restaurant[]);
-    }
-
-    buildYelpStarImage(rating: number){
-        let yelpStarImageUrl = "./assets/yelp/large/large_";
-        if(Math.floor(rating) === rating){
-            yelpStarImageUrl += rating;
-        }
-        else {
-            yelpStarImageUrl += Math.floor(rating) + "_half";
-        }
-        yelpStarImageUrl += ".png";
-        return yelpStarImageUrl;
-    }
+  }
+  searchChange() {
+      this.resultsExhausted = false;
+      this.firstSuggestion = true;
+      this.counter = 0;
+      this.offset = 0;
+      this.restaurants = [];
+      this.suggest();
+  }
+  buildParams(): HttpParams {
+      let params = new HttpParams();
+      params = params.append('term', 'restaurant');
+      params = params.append('open_now', 'true');
+      params = params.append('location', this.location);
+      if (this.selectedCategory && this.selectedCategory.alias) {
+          params = params.append('categories', this.selectedCategory.alias);
+      }
+      if (this.distance) {
+          let distanceInMeters = this.distance * 1609; // 1609 meters to a mile
+          if (distanceInMeters > 40000) {
+              distanceInMeters = 40000; // Maximum searchable distance is 40000 meters, almost 25 miles
+          }
+          params = params.append('radius', distanceInMeters.toString());
+      }
+      params = params.append('limit', this.restaurantLimit.toString());
+      params = params.append('offset', this.offset.toString());
+      return params;
+  }
+  buildYelpStarImage(rating: number) {
+      let yelpStarImageUrl = './assets/yelp/large/large_';
+      if (Math.floor(rating) === rating) {
+          yelpStarImageUrl += rating;
+      } else {
+          yelpStarImageUrl += Math.floor(rating) + '_half';
+      }
+      yelpStarImageUrl += '.png';
+      return yelpStarImageUrl;
+  }
 }

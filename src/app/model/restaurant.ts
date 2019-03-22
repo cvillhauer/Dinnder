@@ -1,4 +1,4 @@
-import { Category } from "./category";
+import { Category } from './category';
 
 export class Restaurant {
     alias: string;
@@ -10,4 +10,8 @@ export class Restaurant {
     transactions: string[];
     price: string;
     distance: number;
+}
+
+export class Restaurants {
+  businesses: Restaurant[];
 }
