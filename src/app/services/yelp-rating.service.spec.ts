@@ -9,4 +9,9 @@ describe('YelpRatingService', () => {
     const service: YelpRatingService = TestBed.get(YelpRatingService);
     expect(service).toBeTruthy();
   });
+
+  it('buildYelpStarImage should return something', () => {
+    const service: YelpRatingService = TestBed.get(YelpRatingService);
+    expect(service.buildYelpStarImage(2)).toBeTruthy();
+  });
 });

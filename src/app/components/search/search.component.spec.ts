@@ -25,4 +25,16 @@ describe('SearchComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('suggest should return void', () => {
+    expect(component.suggest()).toBeUndefined();
+  });
+
+  it('searchChange should return void', () => {
+    expect(component.searchChange()).toBeUndefined();
+  });
+
+  it('deriveRadius should return something', () => {
+    expect(component.deriveRadius()).toBeDefined();
+  });
 });
