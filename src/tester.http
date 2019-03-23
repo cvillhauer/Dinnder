@@ -1,0 +1,3 @@
+GET https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=restaurant&open_now=true&location=1211%20Bainbridge%20Dr,%20Nashville,%2037211&radius=40000&limit=20&offset=0 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer iQs04ljFIuuD88ShazdNj_TP0VlrQuN2lm5iIu4hd4jjCwReExISjHVYJxv0ZmoB1-6cIUvwL25azbr9lXUD3fgzyavRzQjJ0Ai0s6Glq0b9-321-bjhhfA7acN6XHYx
