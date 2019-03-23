@@ -7,9 +7,11 @@ import { AppComponent } from './app.component';
 import { SuggestionComponent } from './components/suggestion.component';
 import { AuthInterceptor } from './services/token-interceptor.service';
 import { AppErrorHandler } from './error.handler';
+import { SearchComponent } from './components/search/search.component';
+import { RestaurantComponent } from './components/restaurant/restaurant.component';
 
 @NgModule({
-  declarations: [ AppComponent, SuggestionComponent ],
+  declarations: [ AppComponent, SuggestionComponent, SearchComponent, RestaurantComponent ],
   imports: [ BrowserModule, FormsModule, HttpClientModule ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
