@@ -16,6 +16,7 @@ import { YelpRatingService } from '../services/yelp-rating.service';
     <restaurant [restaurants]="restaurants"
       [loading]="loading" [buildYelpStarImage]="buildYelpStarImage"
       [counter]="counter" [resultsExhausted]="resultsExhausted"
+      [noResults]="noResult"
       (next)="next()" (previous)="previous()" ></restaurant>
   </div>
   `
@@ -26,27 +27,41 @@ export class SuggestionComponent implements OnInit {
   offset = 0;
   restaurantLimit = 20;
   resultsExhausted = false;
-  firstSuggestion = true;
   restaurants: Restaurant[] = [];
   categories: Category[] = [];
+  hasSearched = false;
+  searchRunning = false;
   constructor(private busService: BusinessService, private catService: CategoryService, private yelpRatingService: YelpRatingService) {}
   get loading() {
-    return !this.firstSuggestion && !this.resultsExhausted && (!this.restaurants || !this.restaurants[this.counter]);
+    return this.searchRunning;
+  }
+  get noResult() {
+    return this.hasSearched && this.restaurants.length === 0;
   }
   get buildYelpStarImage() {
     return this.restaurants[this.counter] ? this.yelpRatingService.buildYelpStarImage(this.restaurants[this.counter].rating) : '';
   }
   ngOnInit() {
     this.catService.getCategories().subscribe(cats => {
-      // console.log('cats', cats);
       this.categories = cats;
     });
   }
   suggest(params: SearchParams) {
     console.log('SearchParams', params);
     this.counter = 0;
-    this.firstSuggestion = false;
-    this.busService.getBusinesses(this.buildParams(params)).subscribe(restaurants => this.restaurants = restaurants);
+    this.hasSearched = false;
+    this.restaurants = [];
+    this.searchRunning = true;
+    this.busService.getBusinesses(this.buildParams(params))
+      .subscribe(restaurants => {
+        this.restaurants = restaurants;
+        this.searchRunning = false;
+        this.hasSearched = true;
+      },
+      (err) => {
+        this.searchRunning = false;
+        this.hasSearched = true;
+      });
   }
   buildParams(params: SearchParams): SearchParams {
     params.limit = this.restaurantLimit.toString();
@@ -54,21 +69,12 @@ export class SuggestionComponent implements OnInit {
     return params;
   }
   next() {
-    // this.counter++; this.offset += this.restaurantLimit;
-    if (this.resultsExhausted) {
-      return;
-    } else if (!this.restaurants || this.counter + 1 >= this.restaurants.length) {
-      if (!this.firstSuggestion) {
-          if (this.restaurants.length < this.restaurantLimit) {
-              this.resultsExhausted = true;
-          }
-          this.offset += this.restaurantLimit;
-      }
-      this.counter = 0;
-      this.restaurants = [];
-      this.firstSuggestion = false;
+    this.counter++; // this.offset += this.restaurantLimit;
+    // console.log('counter', this.counter, 'restaurants', this.restaurants.length);
+    if (this.counter > this.restaurants.length) {
+      this.resultsExhausted = true;
     } else {
-      this.counter += 1;
+      this.resultsExhausted = false;
     }
   }
   previous() { this.counter--; }

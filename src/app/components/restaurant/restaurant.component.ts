@@ -18,11 +18,12 @@ import { Restaurant } from '../../model/restaurant';
           <img width="500" src="{{restaurants[counter].image_url}}" title="{{restaurants[counter].name}}">
         </a>
       </div>
-      <div class="col-xs-1 pagination" *ngIf="counter < (restaurants.length + 1)">
+      <div class="col-xs-1 pagination" *ngIf="counter < (restaurants.length - 1)">
         <li><a href="#" (click)="onNext()">></a></li>
       </div>
     </div>
 
+  <div class="col-xs-12" *ngIf="noResults"><p>No restaurants match. Please alter your search terms.</p></div>
   <div class="col-xs-12" *ngIf="resultsExhausted"><p>No more restaurants available. Please alter your search terms.</p></div>
   <div class="col-xs-12" *ngIf="loading"><p>Loading...</p></div>
   `,
@@ -34,6 +35,7 @@ export class RestaurantComponent {
   @Input() buildYelpStarImage: any;
   @Input() counter = 0;
   @Input() resultsExhausted = false;
+  @Input() noResults = false;
   @Output() next: EventEmitter<void> = new EventEmitter();
   @Output() previous: EventEmitter<void> = new EventEmitter();
   onNext() { this.next.emit(); }
