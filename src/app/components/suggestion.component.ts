@@ -15,7 +15,8 @@ import { YelpRatingService } from '../services/yelp-rating.service';
   <div class="row">
     <restaurant [restaurants]="restaurants"
       [loading]="loading" [buildYelpStarImage]="buildYelpStarImage"
-      [counter]="counter" [resultsExhausted]="resultsExhausted"></restaurant>
+      [counter]="counter" [resultsExhausted]="resultsExhausted"
+      (next)="next()" (previous)="previous()" ></restaurant>
   </div>
   `
 })
@@ -43,27 +44,32 @@ export class SuggestionComponent implements OnInit {
   }
   suggest(params: SearchParams) {
     console.log('SearchParams', params);
+    this.counter = 0;
+    this.firstSuggestion = false;
     this.busService.getBusinesses(this.buildParams(params)).subscribe(restaurants => this.restaurants = restaurants);
-    // if (this.resultsExhausted) {
-    //     return;
-    // } else if (!this.restaurants || this.counter + 1 >= this.restaurants.length) {
-    //     if (!this.firstSuggestion) {
-    //         if (this.restaurants.length < this.restaurantLimit) {
-    //             this.resultsExhausted = true;
-    //         }
-    //         this.offset += this.restaurantLimit;
-    //     }
-    //     this.counter = 0;
-    //     this.restaurants = [];
-    //     this.firstSuggestion = false;
-    //     this.busService.getBusinesses(this.buildParams(params)).subscribe(restaurants => this.restaurants = restaurants);
-    // } else {
-    //     this.counter += 1;
-    // }
   }
   buildParams(params: SearchParams): SearchParams {
     params.limit = this.restaurantLimit.toString();
     params.offset = this.offset.toString();
     return params;
   }
+  next() {
+    // this.counter++; this.offset += this.restaurantLimit;
+    if (this.resultsExhausted) {
+      return;
+    } else if (!this.restaurants || this.counter + 1 >= this.restaurants.length) {
+      if (!this.firstSuggestion) {
+          if (this.restaurants.length < this.restaurantLimit) {
+              this.resultsExhausted = true;
+          }
+          this.offset += this.restaurantLimit;
+      }
+      this.counter = 0;
+      this.restaurants = [];
+      this.firstSuggestion = false;
+    } else {
+      this.counter += 1;
+    }
+  }
+  previous() { this.counter--; }
 }
