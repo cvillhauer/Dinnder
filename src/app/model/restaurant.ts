@@ -10,9 +10,6 @@ export class Restaurant {
     transactions: string[] = [];
     price: string;
     distance: number;
-    get delivers() {
-      return this.transactions.some(t => t === 'delivery');
-    }
 }
 
 export class Restaurants {

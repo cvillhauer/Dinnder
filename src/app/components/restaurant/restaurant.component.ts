@@ -43,7 +43,6 @@ export class RestaurantComponent implements OnChanges {
   onNext() { this.next.emit(); }
   onPrevious() { this.previous.emit(); }
   ngOnChanges(): void {
-    // throw new Error("Method not implemented.");
     console.log('current restaurant', this.restaurants[this.counter]);
   }
   get delivers() {
