@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { Restaurant } from '../../model/restaurant';
 
 @Component({
@@ -11,7 +11,9 @@ import { Restaurant } from '../../model/restaurant';
         <li><a href="#" (click)="onPrevious()"><</a></li>
       </div>
       <h4>{{restaurants[counter].name}} &nbsp; {{restaurants[counter].price}} &nbsp;
-            <img src="{{buildYelpStarImage}}"/></h4>
+            <img src="{{buildYelpStarImage}}"/>&nbsp;
+            <span *ngIf="delivers">**</span>
+      </h4>
 
       <div class="col-xs-10">
         <a href="{{restaurants[counter].url}}">
@@ -29,7 +31,7 @@ import { Restaurant } from '../../model/restaurant';
   `,
   styles: []
 })
-export class RestaurantComponent {
+export class RestaurantComponent implements OnChanges {
   @Input() restaurants: Restaurant[] = [];
   @Input() loading = false;
   @Input() buildYelpStarImage: any;
@@ -40,4 +42,11 @@ export class RestaurantComponent {
   @Output() previous: EventEmitter<void> = new EventEmitter();
   onNext() { this.next.emit(); }
   onPrevious() { this.previous.emit(); }
+  ngOnChanges(): void {
+    // throw new Error("Method not implemented.");
+    console.log('current restaurant', this.restaurants[this.counter]);
+  }
+  get delivers() {
+    return this.restaurants[this.counter].transactions.some(t => t === 'delivery');
+  }
 }

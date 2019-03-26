@@ -7,9 +7,12 @@ export class Restaurant {
     url: string;
     categories: Category[];
     rating: number;
-    transactions: string[];
+    transactions: string[] = [];
     price: string;
     distance: number;
+    get delivers() {
+      return this.transactions.some(t => t === 'delivery');
+    }
 }
 
 export class Restaurants {
