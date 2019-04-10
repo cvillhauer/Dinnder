@@ -13,7 +13,8 @@
         <label>Distance:</label>
         <input class="form-control" [(ngModel)]="distance" (change)="searchChange()" />
         <br />
-        <button type="button" class="form-control btn btn-default" style="margin-top: 25px;"
-            (click)="suggest()">Suggest</button>
+        <button type="button" class="form-control btn btn-default" style="margin-top: 25px;" (click)="suggest()" title="Suggest">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
     </div>
 </div>
