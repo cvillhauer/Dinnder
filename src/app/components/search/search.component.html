@@ -1,0 +1,19 @@
+<div class="row">
+    <div class="col-xs-9">
+        <label>Location:</label>
+        <input class="form-control" [(ngModel)]="location" (keydown.enter)="suggest()" (change)="searchChange()" />
+        <br />
+        <label>Category: (optional)</label>
+        <select class="form-control" [(ngModel)]="selectedCategory" (change)="searchChange()">
+            <option></option>
+            <option *ngFor="let category of categories" [ngValue]="category">{{category.title}}</option>
+        </select>
+    </div>
+    <div class="col-xs-3">
+        <label>Distance:</label>
+        <input class="form-control" [(ngModel)]="distance" (change)="searchChange()" />
+        <br />
+        <button type="button" class="form-control btn btn-default" style="margin-top: 25px;"
+            (click)="suggest()">Suggest</button>
+    </div>
+</div>
