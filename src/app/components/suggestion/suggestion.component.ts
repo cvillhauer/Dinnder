@@ -1,25 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Restaurant } from '../model/restaurant';
-import { Category } from '../model/category';
-import { BusinessService } from '../services/business.service';
-import { CategoryService } from '../services/category.service';
-import { SearchParams } from '../model/search-params';
-import { YelpRatingService } from '../services/yelp-rating.service';
+import { Restaurant } from '../../model/restaurant';
+import { Category } from '../../model/category';
+import { BusinessService } from '../../services/business.service';
+import { CategoryService } from '../../services/category.service';
+import { SearchParams } from '../../model/search-params';
+import { YelpRatingService } from '../../services/yelp-rating.service';
 
 @Component({
   selector: 'suggestion',
-  template:
-  `<div class="row">
-    <search [categories]="categories" (OnSuggest)="suggest($event)"></search>
-  </div>
-  <div class="row">
-    <restaurant [restaurants]="restaurants"
-      [loading]="loading" [buildYelpStarImage]="buildYelpStarImage"
-      [counter]="counter" [resultsExhausted]="resultsExhausted"
-      [noResults]="noResult"
-      (next)="next()" (previous)="previous()" ></restaurant>
-  </div>
-  `
+  templateUrl: 'suggestion.component.html'
 })
 
 export class SuggestionComponent implements OnInit {
