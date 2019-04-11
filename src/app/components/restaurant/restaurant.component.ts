@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Restaurant } from '../../model/restaurant';
+import { Category } from '../../model/category';
 
 @Component({
   selector: 'restaurant',
@@ -15,7 +16,7 @@ export class RestaurantComponent {
   @Input() noResults = false;
   @Output() next: EventEmitter<void> = new EventEmitter();
   @Output() previous: EventEmitter<void> = new EventEmitter();
-  @Output() switchCategory: EventEmitter<string> = new EventEmitter();
+  @Output() switchCategory: EventEmitter<Category> = new EventEmitter();
   onNext() { this.next.emit(); }
   onPrevious() { this.previous.emit(); }
   onSwitch(category) { this.switchCategory.emit(category); }

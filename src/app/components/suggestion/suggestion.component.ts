@@ -20,6 +20,7 @@ export class SuggestionComponent implements OnInit {
   categories: Category[] = [];
   hasSearched = false;
   searchRunning = false;
+  switchedCategory: Category;
   constructor(private busService: BusinessService, private catService: CategoryService, private yelpRatingService: YelpRatingService) { }
   get loading() {
     return this.searchRunning;
@@ -58,8 +59,7 @@ export class SuggestionComponent implements OnInit {
     return params;
   }
   next() {
-    this.counter++; // this.offset += this.restaurantLimit;
-    // console.log('counter', this.counter, 'restaurants', this.restaurants.length);
+    this.counter++;
     if (this.counter > this.restaurants.length) {
       this.resultsExhausted = true;
     } else {
@@ -69,8 +69,8 @@ export class SuggestionComponent implements OnInit {
   previous() {
     this.counter--;
   }
-  switchCategory(switchCategory: string) {
-    console.log("Switch category event");
+  switchCategory(switchCategory: Category) {
     console.log(switchCategory);
+    this.switchedCategory = switchCategory;
   }
 }

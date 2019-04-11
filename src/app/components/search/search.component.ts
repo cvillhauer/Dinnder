@@ -13,11 +13,14 @@ import { SuggestionService } from '../../services/suggestion.service';
 export class SearchComponent implements OnInit {
   @Input() categories: Category[] = [];
   @Output() OnSuggest: EventEmitter<SearchParams> = new EventEmitter<SearchParams>();
-  selectedCategory: Category;
+  @Input() selectedCategory: Category;
   distance = 5;
   location: string;
   constructor(private catService: CategoryService, private suggestionService: SuggestionService) { }
   ngOnInit() { }
+  ngOnChanges(changes){
+    this.suggest();
+  }
   suggest() {
     const params = Object.assign({}, environment.searchParams);
     params.location = this.location;

@@ -1,5 +1,5 @@
 <div class="row">
-    <search [categories]="categories" (OnSuggest)="suggest($event)"></search>
+    <search [categories]="categories" (OnSuggest)="suggest($event)" [selectedCategory]="switchedCategory"></search>
 </div>
 <div class="row">
     <restaurant [restaurants]="restaurants" [loading]="loading" [buildYelpStarImage]="buildYelpStarImage"

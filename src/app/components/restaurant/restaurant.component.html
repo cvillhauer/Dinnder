@@ -25,7 +25,7 @@
         <ul class="list-inline">
             <li class="category" style="padding: 10px;" title="Select category"
                 *ngFor="let category of restaurants[counter].categories">
-                <button class="btn btn-default" (click)="onSwitch(category.title)">{{category.title}}</button></li>
+                <button class="btn btn-default" (click)="onSwitch(category)">{{category.title}}</button></li>
         </ul>
     </div>
 
