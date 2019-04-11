@@ -15,6 +15,8 @@ export class RestaurantComponent {
   @Input() noResults = false;
   @Output() next: EventEmitter<void> = new EventEmitter();
   @Output() previous: EventEmitter<void> = new EventEmitter();
+  @Output() switchCategory: EventEmitter<string> = new EventEmitter();
   onNext() { this.next.emit(); }
   onPrevious() { this.previous.emit(); }
+  onSwitch(category) { this.switchCategory.emit(category); }
 }

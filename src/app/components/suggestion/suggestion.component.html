@@ -3,6 +3,6 @@
 </div>
 <div class="row">
     <restaurant [restaurants]="restaurants" [loading]="loading" [buildYelpStarImage]="buildYelpStarImage"
-        [counter]="counter" [resultsExhausted]="resultsExhausted" [noResults]="noResult" (next)="next()"
-        (previous)="previous()"></restaurant>
+        [counter]="counter" [resultsExhausted]="resultsExhausted" [noResults]="noResult"
+        (next)="next()" (previous)="previous()" (switchCategory)="switchCategory($event)"></restaurant>
 </div>
