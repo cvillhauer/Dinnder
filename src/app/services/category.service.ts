@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Category, Categories } from '../model/category';
+import { Category } from '../model/category';
 import { Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -52,5 +50,8 @@ export class CategoryService {
       //   // tap(cObj => console.log('cObj.categories: ', cObj.categories) ),
       //   map(cObj => cObj.categories.filter(c => c.parent_aliases.some(v => v === 'restaurants')) )
       // );
+  }
+  addCategory(category: Category) {
+    this.categories.push(category);
   }
 }
