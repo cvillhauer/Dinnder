@@ -4,7 +4,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, ErrorHandler } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { SuggestionComponent } from './components/suggestion.component';
+import { SuggestionComponent } from './components/suggestion/suggestion.component';
 import { AuthInterceptor } from './services/token-interceptor.service';
 import { AppErrorHandler } from './error.handler';
 import { SearchComponent } from './components/search/search.component';

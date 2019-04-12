@@ -1,6 +1,6 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { SuggestionComponent } from './components/suggestion.component';
+import { SuggestionComponent } from './components/suggestion/suggestion.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SearchComponent } from './components/search/search.component';

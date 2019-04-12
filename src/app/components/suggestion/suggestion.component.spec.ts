@@ -3,8 +3,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { SuggestionComponent } from './suggestion.component';
 import { FormsModule } from '@angular/forms';
-import { SearchComponent } from './search/search.component';
-import { RestaurantComponent } from './restaurant/restaurant.component';
+import { SearchComponent } from '../search/search.component';
+import { RestaurantComponent } from '../restaurant/restaurant.component';
 
 describe('SuggestionComponent', () => {
   let component: SuggestionComponent;

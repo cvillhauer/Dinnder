@@ -6,3 +6,8 @@ body{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: #dddddd;
 }
+
+.img-scaled{
+    max-width: 100%;
+    height: auto;
+}
