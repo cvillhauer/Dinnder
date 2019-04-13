@@ -27,7 +27,7 @@ export class SearchComponent implements OnInit {
       const existingCat = this.categories.filter(c => c.alias === category.alias);
       if (existingCat.length > 0) {
         this.selectedCategory = existingCat[0];
-      } else {
+      } else if (category.title) {
         this.catService.addCategory(category);
         this.selectedCategory = category;
       }
