@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { Category } from '../../model/category';
 import { CategoryService } from '../../services/category.service';
 import { SearchParams } from '../../model/search-params';
@@ -10,15 +10,26 @@ import { SuggestionService } from '../../services/suggestion.service';
   templateUrl: 'search.component.html',
   styles: []
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnChanges {
   @Input() categories: Category[] = [];
   @Output() OnSuggest: EventEmitter<SearchParams> = new EventEmitter<SearchParams>();
   @Input() selectedCategory: Category;
   distance = 5;
   location: string;
   constructor(private catService: CategoryService, private suggestionService: SuggestionService) { }
-  ngOnInit() { }
-  ngOnChanges(changes){
+  ngOnInit() {
+    this.suggestionService.category$.subscribe(category => {
+      const existingCat = this.categories.filter(c => c.alias === category.alias);
+      if (existingCat.length > 0) {
+        this.selectedCategory = existingCat[0];
+      } else {
+        this.catService.addCategory(category);
+        this.selectedCategory = category;
+      }
+      this.suggest();
+    });
+  }
+  ngOnChanges(changes) {
     this.suggest();
   }
   suggest() {

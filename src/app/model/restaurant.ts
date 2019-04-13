@@ -7,7 +7,7 @@ export class Restaurant {
     url: string;
     categories: Category[];
     rating: number;
-    transactions: string[];
+    transactions: string[] = [];
     price: string;
     distance: number;
 }
