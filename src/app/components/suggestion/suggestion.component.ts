@@ -69,8 +69,4 @@ export class SuggestionComponent implements OnInit {
   previous() {
     this.counter--;
   }
-  switchCategory(switchCategory: Category) {
-    console.log(switchCategory);
-    this.switchedCategory = switchCategory;
-  }
 }

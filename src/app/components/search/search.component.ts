@@ -10,15 +10,20 @@ import { SuggestionService } from '../../services/suggestion.service';
   templateUrl: 'search.component.html',
   styles: []
 })
-export class SearchComponent implements OnInit, OnChanges {
+export class SearchComponent implements OnInit {
   @Input() categories: Category[] = [];
   @Output() OnSuggest: EventEmitter<SearchParams> = new EventEmitter<SearchParams>();
   @Input() selectedCategory: Category;
   distance = 5;
   location: string;
+  latitude: number = 0;
+  longitude: number = 0;
   constructor(private catService: CategoryService, private suggestionService: SuggestionService) { }
   ngOnInit() {
     this.suggestionService.category$.subscribe(category => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(this.useCurrentLocation.bind(this));
+      }
       const existingCat = this.categories.filter(c => c.alias === category.alias);
       if (existingCat.length > 0) {
         this.selectedCategory = existingCat[0];
@@ -26,15 +31,20 @@ export class SearchComponent implements OnInit, OnChanges {
         this.catService.addCategory(category);
         this.selectedCategory = category;
       }
-      this.suggest();
     });
-  }
-  ngOnChanges(changes) {
-    this.suggest();
   }
   suggest() {
     const params = Object.assign({}, environment.searchParams);
-    params.location = this.location;
+    if(this.location){
+      params.location = this.location;
+      params.latitude = 0;
+      params.longitude = 0;
+    }
+    else if(this.latitude && this.longitude){
+      params.latitude = this.latitude;
+      params.longitude = this.longitude;
+      params.location = undefined;
+    }
     params.categories = this.selectedCategory ? this.selectedCategory.alias : '';
     params.radius = this.deriveRadius();
     this.OnSuggest.emit(params);
@@ -52,5 +62,10 @@ export class SearchComponent implements OnInit, OnChanges {
     } else {
       return (5 * 1609).toString();
     }
+  }
+  useCurrentLocation(position){
+    this.latitude = position.coords.latitude;
+    this.longitude = position.coords.longitude;
+    this.suggest();
   }
 }

@@ -9,6 +9,8 @@ export const environment = {
     term: 'restaurant',
     open_now: 'true',
     location: '',
+    latitude: 0,
+    longitude: 0,
     categories: '',
     radius: (5 * 1609).toString(),
     limit: '20',
