@@ -45,6 +45,9 @@ export class SearchComponent implements OnInit {
       params.longitude = this.longitude;
       params.location = undefined;
     }
+    else{
+      params.location = "Nashville";
+    }
     params.categories = this.selectedCategory ? this.selectedCategory.alias : '';
     params.radius = this.deriveRadius();
     this.OnSuggest.emit(params);
