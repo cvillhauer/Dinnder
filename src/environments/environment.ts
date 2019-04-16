@@ -13,7 +13,7 @@ export const environment = {
     longitude: 0,
     categories: '',
     radius: (5 * 1609).toString(),
-    limit: '20',
+    limit: '50',
     offset: '0'
   }
 };

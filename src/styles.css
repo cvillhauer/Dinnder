@@ -13,21 +13,21 @@ body{
 }
 
 .btn, .form-control{
-    background-color: #EDA1D3;
-    color: #540839;
-    border: 2px solid #EDA1D3;
+    background-color: #540839;
+    color: #dddddd;
+    border: 2px solid #540839;
 }
 
 .btn:hover, .form-control:hover{
-    border: 2px solid #540839;
-    background-color: #EDA1D3;
-    color: #000000;
+    border: 2px solid #FFFFFF;
+    background-color: #540839;
+    color: #dddddd;
 }
 
 .btn:focus, .form-control:focus, 
 .btn:active, .form-control:active, 
 .btn:active:hover, .form-control:active:hover{
-    border: 2px solid #000000;
-    background-color: #EDA1D3;
-    color: #000000;
+    border: 2px solid #dddddd;
+    background-color: #540839;
+    color: #FFFFFF;
 } 

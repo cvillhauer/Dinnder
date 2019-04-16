@@ -14,7 +14,6 @@ import { YelpRatingService } from '../../services/yelp-rating.service';
 export class SuggestionComponent implements OnInit {
   counter = 0;
   offset = 0;
-  restaurantLimit = 20;
   resultsExhausted = false;
   restaurants: Restaurant[] = [];
   categories: Category[] = [];
@@ -44,7 +43,13 @@ export class SuggestionComponent implements OnInit {
     this.searchRunning = true;
     this.busService.getBusinesses(this.buildParams(params))
       .subscribe(restaurants => {
-        this.restaurants = restaurants;
+        //Adding in a randomizer so that users aren't constantly presented with the same restaurant
+        //Not the most random or the most performant, but our array is <= 50 items so who cares?
+        //https://stackoverflow.com/a/46545530/3053913
+        this.restaurants = restaurants
+          .map((a) => ({ sort: Math.random(), value: a }))
+          .sort((a, b) => a.sort - b.sort)
+          .map((a) => a.value);
         this.searchRunning = false;
         this.hasSearched = true;
       },
@@ -54,7 +59,6 @@ export class SuggestionComponent implements OnInit {
         });
   }
   buildParams(params: SearchParams): SearchParams {
-    params.limit = this.restaurantLimit.toString();
     params.offset = this.offset.toString();
     return params;
   }
