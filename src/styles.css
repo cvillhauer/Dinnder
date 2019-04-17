@@ -1,10 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.min.css';
 
+:root{
+    --bright-pink: #a01e73;
+    --dark-pink: #540839;
+    --gray: #dddddd;
+
+    --main-bg-color: var(--bright-pink);
+    --button-bg-color: var(--dark-pink);
+    --button-color-1: white;
+    --button-color-2: var(--gray);
+}
+
 body{
-    background-color: #a01e73;
+    background-color: var(--main-bg-color);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #dddddd;
+    color: var(--gray);
 }
 
 .img-scaled{
@@ -13,21 +24,21 @@ body{
 }
 
 .btn, .form-control{
-    background-color: #540839;
-    color: #dddddd;
-    border: 2px solid #540839;
+    background-color: var(--button-bg-color);
+    color: var(--button-color-2);
+    border: 2px solid var(--button-bg-color);
 }
 
 .btn:hover, .form-control:hover{
-    border: 2px solid #FFFFFF;
-    background-color: #540839;
-    color: #dddddd;
+    border: 2px solid var(--button-color-2);
+    background-color: var(--button-bg-color);
+    color: var(--button-color-2);
 }
 
 .btn:focus, .form-control:focus, 
 .btn:active, .form-control:active, 
 .btn:active:hover, .form-control:active:hover{
-    border: 2px solid #dddddd;
-    background-color: #540839;
-    color: #FFFFFF;
+    border: 2px solid var(--button-color-2);
+    background-color: var(--button-bg-color);
+    color: var(--button-color-1);
 } 
