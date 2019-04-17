@@ -4,12 +4,14 @@
 :root{
     --bright-pink: #a01e73;
     --dark-pink: #540839;
+    --mint-green: #A6D9AD;
     --gray: #dddddd;
+    --dark-gray: #333333;
 
     --main-bg-color: var(--bright-pink);
-    --button-bg-color: var(--dark-pink);
-    --button-color-1: white;
-    --button-color-2: var(--gray);
+    --button-bg-color: var(--mint-green);
+    --button-color-1: black;
+    --button-color-2: var(--dark-gray);
 }
 
 body{
