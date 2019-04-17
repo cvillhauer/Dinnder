@@ -10,14 +10,14 @@ import { SuggestionService } from '../../services/suggestion.service';
   templateUrl: 'search.component.html',
   styles: []
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnChanges {
   @Input() categories: Category[] = [];
   @Output() OnSuggest: EventEmitter<SearchParams> = new EventEmitter<SearchParams>();
   @Input() selectedCategory: Category;
   distance = 5;
   location: string;
-  latitude: number = 0;
-  longitude: number = 0;
+  latitude = 0;
+  longitude = 0;
   constructor(private catService: CategoryService, private suggestionService: SuggestionService) { }
   ngOnInit() {
     this.suggestionService.category$.subscribe(category => {
@@ -31,22 +31,24 @@ export class SearchComponent implements OnInit {
         this.catService.addCategory(category);
         this.selectedCategory = category;
       }
+      this.suggest();
     });
+  }
+  ngOnChanges(changes) {
+    this.suggest();
   }
   suggest() {
     const params = Object.assign({}, environment.searchParams);
-    if(this.location){
+    if (this.location) {
       params.location = this.location;
       params.latitude = 0;
       params.longitude = 0;
-    }
-    else if(this.latitude && this.longitude){
+    } else if (this.latitude && this.longitude) {
       params.latitude = this.latitude;
       params.longitude = this.longitude;
       params.location = undefined;
-    }
-    else{
-      params.location = "Nashville";
+    } else {
+      params.location = 'Nashvlle';
     }
     params.categories = this.selectedCategory ? this.selectedCategory.alias : '';
     params.radius = this.deriveRadius();
@@ -66,7 +68,7 @@ export class SearchComponent implements OnInit {
       return (5 * 1609).toString();
     }
   }
-  useCurrentLocation(position){
+  useCurrentLocation(position) {
     this.latitude = position.coords.latitude;
     this.longitude = position.coords.longitude;
     this.suggest();
