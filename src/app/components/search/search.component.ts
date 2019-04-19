@@ -31,7 +31,6 @@ export class SearchComponent implements OnInit, OnChanges {
         this.catService.addCategory(category);
         this.selectedCategory = category;
       }
-      this.suggest();
     });
   }
   ngOnChanges(changes) {
@@ -71,6 +70,5 @@ export class SearchComponent implements OnInit, OnChanges {
   useCurrentLocation(position) {
     this.latitude = position.coords.latitude;
     this.longitude = position.coords.longitude;
-    this.suggest();
   }
 }
