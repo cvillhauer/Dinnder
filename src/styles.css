@@ -9,7 +9,7 @@
     --dark-gray: #333333;
 
     --main-bg-color: var(--bright-pink);
-    --button-bg-color: var(--mint-green);
+    --button-bg-color: var(--gray);
     --button-color-1: black;
     --button-color-2: var(--dark-gray);
 }
@@ -41,6 +41,6 @@ body{
 .btn:active, .form-control:active, 
 .btn:active:hover, .form-control:active:hover{
     border: 2px solid var(--button-color-2);
-    background-color: var(--button-bg-color);
-    color: var(--button-color-1);
+    background-color: var(--button-color-2);
+    color: var(--button-bg-color);
 } 
