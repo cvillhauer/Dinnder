@@ -20,16 +20,18 @@ export class SearchComponent implements OnInit, OnChanges {
   longitude = 0;
   constructor(private catService: CategoryService, private suggestionService: SuggestionService) { }
   ngOnInit() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(this.useCurrentLocation.bind(this));
+    }
     this.suggestionService.category$.subscribe(category => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(this.useCurrentLocation.bind(this));
-      }
       const existingCat = this.categories.filter(c => c.alias === category.alias);
       if (existingCat.length > 0) {
         this.selectedCategory = existingCat[0];
+        this.suggest();
       } else if (category.title) {
         this.catService.addCategory(category);
         this.selectedCategory = category;
+        this.suggest();
       }
     });
   }
