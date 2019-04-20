@@ -13,6 +13,7 @@ export const environment = {
     longitude: 0,
     categories: '',
     radius: (5 * 1609).toString(),
+    sort_by: 'distance',
     limit: '50',
     offset: '0'
   }

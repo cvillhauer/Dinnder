@@ -45,6 +45,7 @@ describe('SuggestionComponent', () => {
       longitude: 0,
       categories: '',
       radius: (5 * 1609).toString(),
+      sort_by: 'distance',
       limit: '20',
       offset: '0'
     })).toBeUndefined();
@@ -59,6 +60,7 @@ describe('SuggestionComponent', () => {
         longitude: 0,
         categories: '',
         radius: (5 * 1609).toString(),
+        sort_by: 'distance',
         limit: '20',
         offset: '0'
       })).toBeDefined();
