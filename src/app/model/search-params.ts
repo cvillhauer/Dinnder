@@ -6,6 +6,7 @@ export interface SearchParams {
   longitude: number;
   categories: string;
   radius: string;
+  sort_by: string,
   limit: string;
   offset: string;
 }

@@ -18,29 +18,31 @@ export class SearchComponent implements OnInit, OnChanges {
   location: string;
   latitude = 0;
   longitude = 0;
+  readonly usingYourLocation = 'Your location';
   constructor(private catService: CategoryService, private suggestionService: SuggestionService) { }
   ngOnInit() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(this.useCurrentLocation.bind(this));
+      navigator.geolocation.getCurrentPosition(this.useCurrentLocation.bind(this), this.defaultLocationNashville.bind(this));
     }
     this.suggestionService.category$.subscribe(category => {
       const existingCat = this.categories.filter(c => c.alias === category.alias);
       if (existingCat.length > 0) {
         this.selectedCategory = existingCat[0];
-        this.suggest();
       } else if (category.title) {
         this.catService.addCategory(category);
         this.selectedCategory = category;
+      }
+      if(this.selectedCategory){
         this.suggest();
       }
     });
   }
   ngOnChanges(changes) {
-    this.suggest();
+    //this.suggest();
   }
   suggest() {
     const params = Object.assign({}, environment.searchParams);
-    if (this.location) {
+    if (this.location && this.location !== this.usingYourLocation) {
       params.location = this.location;
       params.latitude = 0;
       params.longitude = 0;
@@ -49,7 +51,7 @@ export class SearchComponent implements OnInit, OnChanges {
       params.longitude = this.longitude;
       params.location = undefined;
     } else {
-      params.location = 'Nashvlle';
+      params.location = undefined;
     }
     params.categories = this.selectedCategory ? this.selectedCategory.alias : '';
     params.radius = this.deriveRadius();
@@ -70,7 +72,18 @@ export class SearchComponent implements OnInit, OnChanges {
     }
   }
   useCurrentLocation(position) {
+    this.location = this.usingYourLocation;
     this.latitude = position.coords.latitude;
     this.longitude = position.coords.longitude;
+    this.suggest();
+  }
+  defaultLocationNashville(){
+    this.location = 'Nashville';
+    this.suggest();
+  }
+  changeLocation(){
+    if(this.location === this.usingYourLocation){
+      this.location = '';
+    }
   }
 }

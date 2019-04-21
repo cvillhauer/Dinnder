@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-xs-9">
         <label>Location:</label>
-        <input class="form-control" [(ngModel)]="location" (keydown.enter)="suggest()" (change)="searchChange()" />
+        <input class="form-control" [(ngModel)]="location" (click)="changeLocation()" (keydown.enter)="suggest()" (change)="searchChange()" />
         <br />
         <label>Category: (optional)</label>
         <select class="form-control" [(ngModel)]="selectedCategory" (change)="searchChange()">
